@@ -9,7 +9,7 @@ export const user: User = {
 
 export let users: User[] = [user];
 
-export const updateUsers = ({ id, user }: { id: string; user: User }) => {
+export const updateUser = ({ id, user }: { id: string; user: User }) => {
   users = users.map((item) => {
     if (item.id === id) {
       return { ...item, ...user };

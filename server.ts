@@ -1,6 +1,6 @@
 import { app } from "./index";
 
-import { deleteUser, updateUsers, users } from "./data/user";
+import { deleteUser, updateUser, users } from "./data/user";
 import { PORT } from "./constants";
 import { findUserById } from "./utils/user";
 import { User } from "./modules/type";
@@ -54,7 +54,7 @@ app.post("/create-user", (req, res, next) => {
 app.patch("/update-user/:userId", (req, res, next) => {
   try {
     if (Object.keys(req.query).length) {
-      updateUsers({ id: req.params.userId, user: req.query as User });
+      updateUser({ id: req.params.userId, user: req.query as User });
       res.status(200).json(users);
 
       return;
@@ -84,7 +84,7 @@ app.delete("/delete-user/:userId", (req, res, next) => {
 app.put("/update-user/:userId", (req, res, next) => {
   try {
     if (Object.keys(req.query).length) {
-      updateUsers({ id: req.params.userId, user: req.query as User });
+      updateUser({ id: req.params.userId, user: req.query as User });
       res.status(200).json(users);
 
       return;
