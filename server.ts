@@ -25,7 +25,7 @@ app.get("/users/:userId", (req: { params: { userId: string } }, res, next) => {
       return;
     }
 
-    throw new Error("User not found");
+    throw new Error("Bad request. User not found");
   } catch (error) {
     next(error);
   }
@@ -33,10 +33,10 @@ app.get("/users/:userId", (req: { params: { userId: string } }, res, next) => {
 
 app.post("/users", (req, res, next) => {
   try {
-    if (req.query.hasOwnProperty("age") && req.query.hasOwnProperty("name")) {
+    if (req.body.hasOwnProperty("age") && req.body.hasOwnProperty("name")) {
       const newUser = {
         id: String(users.length + 1),
-        ...(req.query as { name: string; age: string }),
+        ...(req.body as { name: string; age: string }),
       };
 
       users.push(newUser);
@@ -45,7 +45,7 @@ app.post("/users", (req, res, next) => {
       return;
     }
 
-    throw new Error("Bad request.");
+    throw new Error("Bad request. Fields age and name is required");
   } catch (error) {
     next(error);
   }
@@ -53,14 +53,14 @@ app.post("/users", (req, res, next) => {
 
 app.patch("/users/:userId", (req, res, next) => {
   try {
-    if (Object.keys(req.query).length) {
-      updateUser({ id: req.params.userId, user: req.query as User });
+    if (Object.keys(req.body).length) {
+      updateUser({ id: req.params.userId, user: req.body as User });
       res.status(200).json(users);
 
       return;
     }
 
-    throw new Error("Bad request.");
+    throw new Error("Bad request. Body is required");
   } catch (error) {
     next(error);
   }
@@ -75,7 +75,7 @@ app.delete("/users/:userId", (req, res, next) => {
       return;
     }
 
-    throw new Error("Bad request.");
+    throw new Error("Bad request. User not found");
   } catch (error) {
     next(error);
   }
@@ -83,14 +83,14 @@ app.delete("/users/:userId", (req, res, next) => {
 
 app.put("/users/:userId", (req, res, next) => {
   try {
-    if (Object.keys(req.query).length) {
-      updateUser({ id: req.params.userId, user: req.query as User });
+    if (Object.keys(req.body).length) {
+      updateUser({ id: req.params.userId, user: req.body as User });
       res.status(200).json(users);
 
       return;
     }
 
-    throw new Error("Bad request.");
+    throw new Error("Bad request. Body is required");
   } catch (error) {
     next(error);
   }
