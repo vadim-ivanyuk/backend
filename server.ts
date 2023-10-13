@@ -31,7 +31,7 @@ app.get("/users/:userId", (req: { params: { userId: string } }, res, next) => {
   }
 });
 
-app.post("/create-user", (req, res, next) => {
+app.post("/users", (req, res, next) => {
   try {
     if (req.query.hasOwnProperty("age") && req.query.hasOwnProperty("name")) {
       const newUser = {
@@ -51,7 +51,7 @@ app.post("/create-user", (req, res, next) => {
   }
 });
 
-app.patch("/update-user/:userId", (req, res, next) => {
+app.patch("/users/:userId", (req, res, next) => {
   try {
     if (Object.keys(req.query).length) {
       updateUser({ id: req.params.userId, user: req.query as User });
@@ -66,7 +66,7 @@ app.patch("/update-user/:userId", (req, res, next) => {
   }
 });
 
-app.delete("/delete-user/:userId", (req, res, next) => {
+app.delete("/users/:userId", (req, res, next) => {
   try {
     if (req.params.userId) {
       deleteUser(req.params.userId);
@@ -81,7 +81,7 @@ app.delete("/delete-user/:userId", (req, res, next) => {
   }
 });
 
-app.put("/update-user/:userId", (req, res, next) => {
+app.put("/users/:userId", (req, res, next) => {
   try {
     if (Object.keys(req.query).length) {
       updateUser({ id: req.params.userId, user: req.query as User });
