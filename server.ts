@@ -1,9 +1,68 @@
-import { app } from "./index";
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import pkg from 'pg';
+const { Pool } = pkg;
 
-import { deleteUser, updateUser, users } from "./data/user";
-import { PORT } from "./constants";
-import { findUserById } from "./utils/user";
-import { User } from "./modules/type";
+type User = {
+  id: string;
+  name: string;
+  age: string;
+  employment?: string;
+};
+const PORT = 4000;
+const user: User = {
+  id: "1",
+  name: "Test",
+  age: "18",
+  employment: "Engineer",
+};
+
+const findUserById = (userId: string) => {
+  return users.find(({ id }: User) => userId === id);
+};
+
+let users: User[] = [user];
+
+const updateUser = ({ id, user }: { id: string; user: User }) => {
+  users = users.map((item) => {
+    if (item.id === id) {
+      return { ...item, ...user };
+    } else {
+      return item;
+    }
+  });
+};
+
+const deleteUser = (id: string) => {
+  return users.filter((item: User) => item.id !== id);
+};
+
+const app = express();
+app.use(helmet());
+
+const pool = new Pool({
+  user: "myuser",
+  host: "localhost",
+  database: "mydb",
+  password: "mypassword",
+  port: 5433,
+});
+
+pool.query("SELECT NOW()", (err: any, res: any) => {
+  if (err) {
+    console.error("Помилка підключення до бази даних:", err);
+  } else {
+    console.log("Підключено до бази даних PostgreSQL");
+  }
+});
+
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  })
+);
 
 app.get("/", (req, res, next) => {
   res.status(200).json({
