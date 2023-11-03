@@ -1,5 +1,15 @@
 version: '3'
 services:
+  node-express-app:
+    build: .
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - node-network
+
   postgres:
     image: postgres:latest
     environment:
@@ -13,3 +23,7 @@ services:
 
 volumes:
   postgres-data:
+
+networks:
+  node-network:
+    driver: bridge
