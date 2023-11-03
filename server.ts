@@ -1,7 +1,8 @@
 import express from "express";
+import fs from "fs";
 import cors from "cors";
 import helmet from "helmet";
-import pkg from 'pg';
+import pkg from "pg";
 const { Pool } = pkg;
 
 type User = {
@@ -49,12 +50,23 @@ const pool = new Pool({
   port: 5433,
 });
 
-pool.query("SELECT NOW()", (err: any, res: any) => {
+pool.connect((err, client, done) => {
   if (err) {
     console.error("Помилка підключення до бази даних:", err);
-  } else {
-    console.log("Підключено до бази даних PostgreSQL");
+    return;
   }
+
+  const migrationScript = fs.readFileSync("./sql/up.sql", "utf8");
+
+  client?.query(migrationScript, (err, result) => {
+    done();
+
+    if (err) {
+      console.error("Помилка виконання міграції:", err);
+    } else {
+      console.log("Міграція виконана успішно.");
+    }
+  });
 });
 
 app.use(
